@@ -16,7 +16,7 @@ struct useraccount {
 
 struct stats {
     double damage, speed, luck, hp, exp, lvl, gold;
-    int extrastats, neededExp;
+    int extrastats, neededExp, expgain;
 };
 
 struct armaments {
@@ -44,6 +44,7 @@ public:
     void expneeded() {
 
         currentstats.neededExp = (((currentstats.lvl * (currentstats.lvl - 1)) / 15) * 100) + 100;
+        currentstats.exp += currentstats.expgain;
         return;
     }
 
@@ -213,7 +214,9 @@ public:
             cout << "-----------------------------" << endl;
         }
 
+
         inFile.close();
+        system("pause");
     }
 
     void huntmonster() {
@@ -326,7 +329,10 @@ public:
 
             if (currentHp <= 0 && yourhp > 0) {
                 cout << "You Won!";
-                gainExperience(5); // Gain 50 EXP for defeating a rat
+                currentstats.expgain = 5;
+                expneeded();
+                saveStats();
+                currentstats.expgain = 0;
             } else if (currentHp > 0 && yourhp <= 0) {
                 cout << "You Lose!";
             } else {
@@ -579,11 +585,35 @@ void saveStats() {
 
     void stats() {
         if (currentuser.role == "Archer") {
-            currentstats = {5, 1, 20, 0, 0, 1, 0};
+            currentstats.damage = 5;
+            currentstats.hp = 20;
+            currentstats.luck = 0;
+            currentstats.lvl = 1;
+            currentstats.exp = 0;
+            currentstats.neededExp = 100;
+            currentstats.extrastats = 0;
+            currentstats.speed = 1;
+            currentstats.gold = 0;
         } else if (currentuser.role == "Warrior") {
-            currentstats = {4, 1, 25, 0, 0, 1, 0};
+            currentstats.damage = 4;
+            currentstats.hp = 25;
+            currentstats.luck = 0;
+            currentstats.lvl = 1;
+            currentstats.exp = 0;
+            currentstats.neededExp = 100;
+            currentstats.extrastats = 0;
+            currentstats.speed = 1;
+            currentstats.gold = 0;
         } else if (currentuser.role == "Mage") {
-            currentstats = {6, 1, 15, 0, 0, 1, 0};
+            currentstats.damage = 6;
+            currentstats.hp = 15;
+            currentstats.luck = 0;
+            currentstats.lvl = 1;
+            currentstats.exp = 0;
+            currentstats.neededExp = 100;
+            currentstats.extrastats = 0;
+            currentstats.speed = 1;
+            currentstats.gold = 0;
         }
         expneeded();
         saveStats();
